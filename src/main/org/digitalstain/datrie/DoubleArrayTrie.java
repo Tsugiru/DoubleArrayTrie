@@ -11,7 +11,7 @@ import org.digitalstain.datrie.mapping.CharacterNaturalMapping;
  * found in standard STL implementations, it also allows us to 
  * insert strings instead of just lists of integers.
  */
-public class DoubleArrayTrie {
+public class DoubleArrayTrie<KeyType> {
 	DoubleArrayTrieImpl datrie;
 	CharacterNaturalMapping cnm;
 	/**
@@ -29,9 +29,10 @@ public class DoubleArrayTrie {
 	 *
 	 * @param key The key to be inserted into the trie
 	 */	
-	public boolean put(String key) {
-		IntegerList intKey = new IntegerArrayList(key.length());
-		for(Character c : key.toCharArray()) {
+	public boolean put(KeyType key) {
+		String keyToString = key.toString();
+		IntegerList intKey = new IntegerArrayList(keyToString.length());
+		for(Character c : keyToString.toCharArray()) {
 			int naturalKey = cnm.toNatural(c);	
 			intKey.add(naturalKey);
 		}
@@ -41,14 +42,15 @@ public class DoubleArrayTrie {
 	/**
 	 * Here, SearchResult is an enum type that encompasses the three cases we could have when we query the trie
 	 * 1- PERFECT_MATCH: This is when the search ends successfully at a leaf node, meaning the key is present in the trie
-	 * 2- PURE_PREFIX: When the search ends at a non-leaf node, meaning that thethe key we used to query the trie is in fact not present in the trie, but is a prefix of another key
+	 * 2- PURE_PREFIX: When the search ends at a non-leaf node, meaning that the key we used to query the trie is in fact not present in the trie, but is a prefix of another key
 	 * 3- NOT_FOUND: Neither of the above two, the key is not recognized by the trie.
 	 *
 	 * @param key The key to be used when querying the trie.
 	 */
-	public SearchResult find(String key) {
-		IntegerList intKey = new IntegerArrayList(key.length());
-		for(Character c : key.toCharArray()) {
+	public SearchResult find(KeyType key) {
+		String keyToString = key.toString();
+		IntegerList intKey = new IntegerArrayList(keyToString.length());
+		for(Character c : keyToString.toCharArray()) {
 			int naturalKey = cnm.toNatural(c);	
 			intKey.add(naturalKey);
 		}
@@ -61,9 +63,10 @@ public class DoubleArrayTrie {
 	 *
 	 * @param key The key to be deleted.
 	 */
-	public boolean remove(String key) {
-		IntegerList intKey = new IntegerArrayList(key.length());
-		for(Character c : key.toCharArray()) {
+	public boolean remove(KeyType key) {
+		String keyToString = key.toString();
+		IntegerList intKey = new IntegerArrayList(keyToString.length());
+		for(Character c : keyToString.toCharArray()) {
 			int naturalKey = cnm.toNatural(c);	
 			intKey.add(naturalKey);
 		}

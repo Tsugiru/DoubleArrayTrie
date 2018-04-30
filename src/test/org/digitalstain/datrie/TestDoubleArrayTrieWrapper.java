@@ -2,7 +2,7 @@ package org.digitalstain.datrie;
 
 public class TestDoubleArrayTrieWrapper {
 	public static void main(String []args) {
-		DoubleArrayTrie datrie = new DoubleArrayTrie(Character.MAX_VALUE);	
+		DoubleArrayTrie<String> datrie = new DoubleArrayTrie<>(Character.MAX_VALUE);	
 		System.out.println(datrie.find("hello"));
 		String s = "hello";
 		datrie.put(s);
