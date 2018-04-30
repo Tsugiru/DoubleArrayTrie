@@ -124,6 +124,63 @@ public abstract class AbstractDoubleArrayTrie {
 	}
 
 	/**
+	 * The below removes a string from the trie if it is already there,
+	 * What we do is basically:
+	 *	1- Check if the string is in the trie
+	 *	2- Walk the trie using the string, at each state check the number of transitions we have
+	 *	3- If we have more than one transition, we take a note of that state
+	 *	4- The last state with more than one transition is the one we should delete from, since
+	 *		walking from this state to the leaf using the string will only go through state which belong
+	 *		solely to that string	 
+	 *	5- If we do not find the string in the trie, we simply have nothing to delete and return false
+	 *
+	 *	@param string the string we want to delete
+	 */
+	public boolean removeFromTrie(IntegerList string) {
+		if(containsPrefix(string) == SearchResult.PERFECT_MATCH) {
+			int state = 0, deleteFromState = 0, deleteFromIndex = 0;
+			//From the if condition above, we can safely walk the string to completion
+			//knowing that it is in the trie
+			for(int i = 0; i < string.size(); i++) {
+				int c = string.get(i);			
+				int transition = getBase(state) + c;
+				//Try to check is we have more than one transition
+				for(int d = 0; d < alphabetLength; d++) {
+					//We do not need to check for the child of the current state that is
+					//the current character c, since we already know it is a transition.
+					if(d == c) {
+						continue;
+					}
+					//If current transition is valid
+					if(transition < getSize() && getCheck(transition) == state) {
+						deleteFromState = state;
+						deleteFromIndex = i;
+					}
+				}
+				state = transition;
+			}
+
+			state = deleteFromState;
+			//Delete everything from deleteFramState till the end 
+			for(int i = deleteFromIndex; i < string.size(); i++) {
+				int c = string.get(i);
+				int transition = getBase(state) + c;
+				setBase(state, EMPTY_VALUE);
+				setCheck(state, EMPTY_VALUE);
+				state = transition;		
+			}
+			return true;
+		}
+		else {
+			//String is not in the trie, nothing to remove
+			return false;
+		}
+		
+	}
+
+
+
+	/**
 	 * This method is the most complex part of the algorithm.
 	 * First of all, keep in mind that the children of a state
 	 * are stored in ordered locations. That means that there is the possibility

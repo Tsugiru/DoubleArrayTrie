@@ -1,6 +1,8 @@
 package org.digitalstain.datrie;
 
+import org.digitalstain.datrie.store.IntegerArrayList;
 import org.digitalstain.datrie.store.IntegerList;
+import org.digitalstain.datrie.mapping.CharacterNaturalMapping;
 
 /**
  * A wrapper for the methods in DoubleArrayTrie and
@@ -9,9 +11,9 @@ import org.digitalstain.datrie.store.IntegerList;
  * found in standard STL implementations, it also allows us to 
  * insert strings instead of just lists of integers.
  */
-class DoubleArrayTrie {
+public class DoubleArrayTrie {
 	DoubleArrayTrieImpl datrie;
-
+	CharacterNaturalMapping cnm;
 	/**
 	 * Constructs a DoubleArrayTrie by using the DoubleArrayTrieImpl Contructor
 	 *
@@ -19,6 +21,7 @@ class DoubleArrayTrie {
 	 */
 	public DoubleArrayTrie(int alphabetLength) {
 		datrie = new DoubleArrayTrieImpl(alphabetLength);
+		cnm = CharacterNaturalMapping.getInstance();
 	}
 
 	/**
@@ -28,10 +31,11 @@ class DoubleArrayTrie {
 	 */	
 	public boolean put(String key) {
 		IntegerList intKey = new IntegerArrayList(key.length());
-		for(int i = 0; i < key.length(); i++) {
-			intKey.add((int)key[i]);
+		for(Character c : key.toCharArray()) {
+			int naturalKey = cnm.toNatural(c);	
+			intKey.add(naturalKey);
 		}
-		datrie.addToTrie(intKey);
+		return datrie.addToTrie(intKey);
 	}
 
 	/**
@@ -44,10 +48,11 @@ class DoubleArrayTrie {
 	 */
 	public SearchResult find(String key) {
 		IntegerList intKey = new IntegerArrayList(key.length());
-		for(int i = 0; i < key.length(); i++) {
-			intKey.add((int)key[i]);
+		for(Character c : key.toCharArray()) {
+			int naturalKey = cnm.toNatural(c);	
+			intKey.add(naturalKey);
 		}
-		SearchResult result = containsPrefix(intKey);
+		SearchResult result = datrie.containsPrefix(intKey);
 		return result;
 	}
 	
@@ -57,6 +62,11 @@ class DoubleArrayTrie {
 	 * @param key The key to be deleted.
 	 */
 	public boolean remove(String key) {
-		//TODO: implement the remove method in the AbstractDoubleArrayTrie.java file
+		IntegerList intKey = new IntegerArrayList(key.length());
+		for(Character c : key.toCharArray()) {
+			int naturalKey = cnm.toNatural(c);	
+			intKey.add(naturalKey);
+		}
+		return datrie.removeFromTrie(intKey);
 	}
 }
