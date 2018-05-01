@@ -9,11 +9,15 @@ import org.digitalstain.datrie.mapping.CharacterNaturalMapping;
  * DoubleArrayTrieImpl that rename the methods to 
  * names people are usually more familiar with such as the ones
  * found in standard STL implementations, it also allows us to 
- * insert strings instead of just lists of integers.
+ * insert generic objects instead of just lists of integers
+ * provided they implement the toString() method.
  */
 public class DoubleArrayTrie<KeyType> {
-	DoubleArrayTrieImpl datrie;
-	CharacterNaturalMapping cnm;
+	////member variables////
+	private	DoubleArrayTrieImpl datrie;
+	private	CharacterNaturalMapping cnm;
+
+	////Methods////
 	/**
 	 * Constructs a DoubleArrayTrie by using the DoubleArrayTrieImpl Contructor
 	 *

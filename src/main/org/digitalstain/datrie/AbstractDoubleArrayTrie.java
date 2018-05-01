@@ -61,6 +61,30 @@ public abstract class AbstractDoubleArrayTrie {
 	}
 
 	/**
+	 * Checks if the state specified has a transition which involves c
+	 *
+	 * @param state The state for which we are checking the validity of the transition
+	 * @param c The integer which induces the transition.
+	 */		
+	protected boolean isWalkable(int state, int c) {
+		if(!(state < getSize())) {
+			return false;
+		}
+		int transition = walk(state, c);
+		return (transition < getSize() && getCheck(transition) == state);
+	}
+
+	/**
+	 * Consume the integer c using the given state and return the resulting new state, this method assumes that c is indeed a transition from state, so be sure to call isWalkable before calling this method.
+	 * 
+	 * @param state the current state
+	 * @param c the integer which we use to go to the next state
+	 */
+	protected int walk(int state, int c) {
+		return getBase(state) + c;
+	}
+
+	/**
 	 * Adds this string to the trie.
 	 * 
 	 * @param string The string to add
@@ -161,7 +185,7 @@ public abstract class AbstractDoubleArrayTrie {
 			}
 
 			state = deleteFromState;
-			//Delete everything from deleteFramState till the end 
+			//Delete everything from deleteFromState till the end 
 			for(int i = deleteFromIndex; i < string.size(); i++) {
 				int c = string.get(i);
 				int transition = getBase(state) + c;
