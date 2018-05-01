@@ -227,7 +227,7 @@ public abstract class AbstractDoubleArrayTrie {
 		// Find all existing children and add them too.
 		for (int c = 0; c < alphabetLength; c++) {
 			int tempNext = getBase(s) + c;
-			if (tempNext < getSize() && getCheck(tempNext) == s)
+			if (tempNext >= 0 && tempNext < getSize() && getCheck(tempNext) == s)
 				values.add(new Integer(c));
 		}
 
