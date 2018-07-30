@@ -99,8 +99,25 @@ public abstract class AbstractDoubleArrayTrie {
 		// For every input character
 		while (i < string.size()) {
 			assert state >= 0;
-			assert getBase(state) >= 0;
-			c = string.get(i);
+			//assert getBase(state) >= 0;
+			//c = string.get(i);
+			//FZ: the following asserttion will fire in case we inserted "a" and 
+			//    then "ab" since inserting "a" will result in base('a') to be set to
+			//    LEAF_BASE_VALUE which is -1
+			//assert getBase(state) >= 0;
+			//FZ: thus the following fix. 
+ 			c = string.get(i);
+			int stateBase = getBase(state);
+			
+			if (i>0 && stateBase == LEAF_BASE_VALUE) {
+				setBase(transition, nextAvailableHop(c)); // Add a state
+				changed = true;
+			} else {
+				assert getBase(state) >= 0;
+			}
+			//FZ: end of fix. 
+		
+			
 			// Calculate next hop. It is the base contents of the current state
 			// plus the input character.
 			transition = getBase(state) + c;
